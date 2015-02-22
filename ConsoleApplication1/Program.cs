@@ -45,7 +45,6 @@ namespace ImportFile
                 {
                     String line, newline;
                     int iCellline = 0, iCompound = 0, iShortCompoundID = 0, iLNumberOnly = 0, iRowNum = 0;
-                    Dictionary<string,string> Previous = new Dictionary<string,string>();
                     Dictionary<string, string> Scrambles = new Dictionary<string, string>();
 
                     try
@@ -65,12 +64,11 @@ namespace ImportFile
 
                                 if (iRowNum == 0)
                                 {
-                                    newline = String.Join("\t",fields);
+                                    newline = line;
                                 }
                                 else
                                 {
-                                    if (!fields[Cellline].Equals(Previous["Cellline"]))
-                                    {
+
                                         if (Scrambles.ContainsKey(fields[Cellline]))
                                         {
                                             new_fields[Cellline] = "Cellline" + Scrambles[fields[Cellline]];
@@ -82,11 +80,7 @@ namespace ImportFile
                                             new_fields[Cellline] = "Cellline" + iCellline.ToString();
                                         }
                                         
-                                    }
-                                    
 
-                                    if (!fields[Compound].Equals(Previous["Compound"]))
-                                    {
                                         if (Scrambles.ContainsKey(fields[Compound]))
                                         {
                                             new_fields[Compound] = "Compound" + Scrambles[fields[Compound]];
@@ -95,41 +89,30 @@ namespace ImportFile
                                         {
                                             iCompound++;
                                             Scrambles.Add(fields[Compound], iCompound.ToString());
-                                            new_fields[Cellline] = "Cellline" + iCellline.ToString();
+                                            new_fields[Compound] = "Compound" + iCompound.ToString();
                                         }
 
-                                    }
-                                    
-                                    if (!fields[ShortCompoundID].Equals(Previous["ShortCompoundID"]))
-                                    {
-                                        if (Scrambles.ContainsKey(fields[Cellline]))
+                                        if (Scrambles.ContainsKey(fields[ShortCompoundID]))
                                         {
-                                            new_fields[Cellline] = "Cellline" + Scrambles[fields[Cellline]];
+                                            new_fields[ShortCompoundID] = "ShortCompoundID" + Scrambles[fields[ShortCompoundID]];
                                         }
                                         else
                                         {
-                                            iCellline++;
-                                            Scrambles.Add(fields[Cellline], iCellline.ToString());
-                                            new_fields[Cellline] = "Cellline" + iCellline.ToString();
+                                            iShortCompoundID++;
+                                            Scrambles.Add(fields[ShortCompoundID], iShortCompoundID.ToString());
+                                            new_fields[ShortCompoundID] = "ShortCompoundID" + iShortCompoundID.ToString();
                                         }
 
-                                    }
-                                    
-                                    if (!fields[LNumberOnly].Equals(Previous["LNumberOnly"]))
-                                    {
-                                        if (Scrambles.ContainsKey(fields[Cellline]))
+                                        if (Scrambles.ContainsKey(fields[LNumberOnly]))
                                         {
-                                            new_fields[Cellline] = "Cellline" + Scrambles[fields[Cellline]];
+                                            new_fields[LNumberOnly] = "LNumberOnly" + Scrambles[fields[LNumberOnly]];
                                         }
                                         else
                                         {
-                                            iCellline++;
-                                            Scrambles.Add(fields[Cellline], iCellline.ToString());
-                                            new_fields[Cellline] = "Cellline" + iCellline.ToString();
+                                            iLNumberOnly++;
+                                            Scrambles.Add(fields[LNumberOnly], iLNumberOnly.ToString());
+                                            new_fields[LNumberOnly] = "Cellline" + iLNumberOnly.ToString();
                                         }
-
-                                    }
-                                    
 
                                     newline = String.Join("\t", new_fields) + Environment.NewLine ;
 
@@ -137,12 +120,6 @@ namespace ImportFile
 
                                 new_file.Write(newline);
                                 
-
-                                Previous.Clear();
-                                Previous.Add("Cellline", fields[Cellline]);
-                                Previous.Add("Compound", fields[Compound]);
-                                Previous.Add("ShortCompoundID", fields[ShortCompoundID]);
-                                Previous.Add("LNumberOnly", fields[LNumberOnly]);
 
                                 iRowNum++;
 
